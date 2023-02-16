@@ -2,6 +2,7 @@
 
 
 namespace custumbox\dispatcher;
+use custumbox\action\AddCommentAction;
 use custumbox\action\DisplayCatalogueAction;
 use custumbox\action\AddUserAction;
 use custumbox\action\DisplayPrincipaleAction;
@@ -45,6 +46,10 @@ class Dispatcher
                 case 'display-catalogue':       // affichage catalogue
                    $act = new DisplayCatalogueAction();
                    $html = $act->execute();
+                    break;
+                case "add-comment" :
+                    $act = new AddCommentAction();
+                    $html = $act->execute();
                     break;
                 case 'display-serie':           // affichage series
                   //  $act = new DisplaySerieAction();

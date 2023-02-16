@@ -25,7 +25,7 @@ class AddCommentAction extends Action
                     if ($user->role != USER::NO_USER) {
                         $email = $user->email;
                         //On regarde si l'utilisateur a deja commenté la serie
-                        $query = "select COUNT(*) from commentaire where email= ? and serie_id = ?";
+                        $query = "select COUNT(*) from commentaire where email= ? and idProduit = ?";
                         $st = ConnectionFactory::$db->prepare($query);
                         $st -> bindParam(1,$email);
                         $st -> bindParam(2,$id);
@@ -34,12 +34,12 @@ class AddCommentAction extends Action
                         //On verifie si l'utilisateur n'a pas deja commenté la serie
                         if ($result['COUNT(*)'] == 0) {
                             //On ajoute le commentaire
-                            $query2 = "insert into commentaire (email,id, commentaire, note) values (?, ?, ?,?)";
+                            $query2 = "insert into commentaire (comm ,note , email, idProduit) values (?, ?, ?,?)";
                             $st2 = ConnectionFactory::$db->prepare($query2);
-                            $st2 -> bindParam(1,$email);
-                            $st2 -> bindParam(2,$id);
-                            $st2 -> bindParam(3,$commentaire);
-                            $st2 -> bindParam(4,$note);
+                            $st2 -> bindParam(1,$commentaire);
+                            $st2 -> bindParam(2,$note);
+                            $st2 -> bindParam(3,$email);
+                            $st2 -> bindParam(4,$id);
                             $st2->execute();
                             $res = "Commentaire ajouté<br>";
                         } else {
