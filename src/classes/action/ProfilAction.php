@@ -34,12 +34,22 @@ class ProfilAction extends Action
      * @return string retourne une chaine avec les informations permettant d afficher le formulaire sur la page html
      */
     function modifProfil() : string{
+        $user = unserialize($_SESSION['user']);
+        $bdd = ConnectionFactory::makeConnection();
+        $c1 = $bdd->prepare("select * from user where login = :login");
+        $c1->bindParam(":login", $user->login);
+        $c1->execute();
+        $d = $c1->fetch();
+        //$userN = User::getUser($user->login);
+
         $res = "<h2>Profil : </h2> ";
         $res .= "<form id='formPro' action='?action=profil' method='POST' >
-                 <label><b>Nom :</b></label>
-                 <input id='input' type='text' placeholder='Entrer votre nom' name='nom'>
+                 <label><b>Nom : </b></label>
+                 <input value='".$d['nom']."' id='input' type='text' placeholder='Entrer votre nom' name='nom'>
                  <label><b>Prénom :</b></label>       
-                 <input id= 'input' type='text' placeholder='Entrer votre prénom' name='prenom'><br>
+                 <input value='".$d['prenom']."' id= 'input' type='text' placeholder='Entrer votre prénom' name='prenom'><br>
+              <center>   <label><b>Téléphone :</b></label>       
+                 <input value='".$d['tel']."' id= 'input' type='text' placeholder='Entrer votre numéro de télélphone' name='telephone'><br></center>
                 
                    
                  <input type='submit' value='Sauvegarder'>";
@@ -60,13 +70,13 @@ class ProfilAction extends Action
             $bdd = ConnectionFactory::makeConnection();
             $nom = filter_var($_POST['nom']);
             $prenom = filter_var($_POST['prenom']);
-            $genrepref = filter_var($_POST['genrepref']);
-            $emailUser = unserialize($_SESSION['user'])->email;
-            $c2 = $bdd->prepare("update user set nom= ? , prenom=? where email = ?");
+            $telephone = filter_var($_POST['telephone']);
+            $loginUser = unserialize($_SESSION['user'])->login;
+            $c2 = $bdd->prepare("update user set nom= ? , prenom=?,telephone = ? where email = ?");
             $c2->bindParam(1,$nom);
             $c2->bindParam(2,$prenom);
-            $c2->bindParam(3,$genrepref);
-            $c2->bindParam(4,$emailUser);
+            $c2->bindParam(3,$telephone);
+            $c2->bindParam(4,$loginUser);
             $c2->execute();
         }
         return $res;

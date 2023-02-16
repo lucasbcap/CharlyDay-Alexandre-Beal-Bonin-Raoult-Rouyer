@@ -19,17 +19,13 @@ class AddUserAction extends Action
             if (isset($_GET['valide'])) {
                 $res = $this->confirmerInscrit();
             } else if (isset($_GET['token']) && Auth::activate($_GET['token'])) {
-                echo "testA";
                 $res = $this->inscrit();
             } else {
-                echo "testB";
                 $res = $this->inscription();
 
             }
         }else
-            echo "testC";
             if ($this->http_method == 'POST') {
-                echo "testD";
                 switch ($this->verifInscription()) {
                     case "LoginExist":
                         header("Location: ?action=add-user&error=1");
@@ -61,8 +57,6 @@ class AddUserAction extends Action
         $email = filter_var($_SESSION['email'], FILTER_SANITIZE_EMAIL);
         $pass = $_SESSION['pass'];
         $login = $_SESSION['login'];
-
-        echo "TestTETET";
         Auth::register($login, $pass, $email);
 
         $_SESSION['token'] = null;
@@ -79,8 +73,10 @@ class AddUserAction extends Action
     function verifInscription(): string
     {
         $r = "Log";
-        echo "testverif";
         //On garde en session ce que l'utilisateur a ecrit pour plus tard
+        $_SESSION['telephone'] = $_POST['telephone'];
+        $_SESSION['nom'] = $_POST['nom'];
+        $_SESSION['prenom'] = $_POST['prenom'];
         $_SESSION['email'] = $_POST['email'];
         $_SESSION['login'] = $_POST['login'];
         $_SESSION['pass'] = $_POST['pass'];
@@ -88,7 +84,6 @@ class AddUserAction extends Action
         //On verifie que toutes les donnees entre sont bonnes
         if ($_SESSION['pass'] == $_SESSION['pass2']) {
             if (Auth::checkPasswordStrength($_SESSION['pass'], 4)) {
-                echo "test1";
                 $bdd = ConnectionFactory::makeConnection();
                 $c1 = $bdd->prepare("Select * from user where login=:login");
                 $c1->bindParam(":login", $_SESSION['login']);
@@ -99,10 +94,8 @@ class AddUserAction extends Action
                 $c2 = $bdd->prepare("Select * from user where email=:email");
                 $c2->bindParam(":email", $_SESSION['email']);
                 $c2->execute();
-                echo"test2";
                 $verif = true;
                 while ($f = $c2->fetch()) {
-                    echo "test3";
                     $verif = false;
                 }
 
@@ -145,7 +138,7 @@ class AddUserAction extends Action
                     <label><b>Mot de passe</b> <input type='password' name='pass' placeholder='Mot de passe'required></label>
                     <label><b>Entrer à nouveau votre mot de passe</b> <input type='password' name='pass2' placeholder='Entrer à nouveau votre mot de passe'required></label>
                     <label><b>Email</b><input type='email' name='email' placeholder='Email'required> </label>
-                    <label><b>Téléphone</b><input type='text' name='tel' placeholder='Téléphone (facultatif)'> </label>
+                    <label><b>Téléphone</b><input type='text' name='telephone' placeholder='Téléphone (facultatif)'> </label>
                     <label><b>Nom</b><input type='text' name='nom' placeholder='Nom (facultatif)'> </label>
                     <label><b>Prénom</b><input type='text' name='prenom' placeholder='Prénom (facultatif)'> </label>
 

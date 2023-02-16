@@ -13,7 +13,7 @@ use custumbox\Catégorie\Categorie;
  */
 class User
 {
-    protected string $email, $passwrd, $token;
+    protected string $login, $nom, $prenom, $tel, $email, $passwrd, $token;
 
     /**
      * Constructeur
@@ -21,8 +21,12 @@ class User
      * @param string $passwrd mot de passe de l'user
      * @param string $token token associe à l'user
      */
-    public function __construct(string $email, string $passwrd, string $token)
+    public function __construct(string $nom, string $prenom, string $telephone, string $login, string $email, string $passwrd, string $token)
     {
+        $this->nom=$nom;
+        $this->prenom = $prenom;
+        $this->tel=$telephone;
+        $this->login=$login;
         $this->email = $email;
         $this->passwrd = $passwrd;
         $this->token = $token;
@@ -114,6 +118,19 @@ class User
 
             $c1->execute();
         }
+    }
+
+    static function getUser(string $login): User
+    {
+        $bdd = ConnectionFactory::makeConnection();
+        $c1 = $bdd->prepare("select * from user where login = :login");
+        $c1->bindParam(":login", $login);
+        $c1->execute();
+        $user = null;
+        while ($d = $c1->fetch()) {
+            $user=new User($d['nom'],$d['prenom'],$d['telephone'],$d['login'],$d['email'],$d['passwrd'],$d['token']);
+        }
+        return $user;
     }
 
     public function __get(string $at):mixed {
