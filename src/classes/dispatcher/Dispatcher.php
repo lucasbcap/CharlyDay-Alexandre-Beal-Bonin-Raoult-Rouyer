@@ -108,7 +108,7 @@ class Dispatcher
             $this->action = explode("&",$this->action)[0];
             if ($this->action == 'display-catalogue') {         //si affichage du catalogue
                 $search = "<div id='catalogue'><form method='post' action='?action=display-catalogue&page=1'><li id='searchbar'><input size='30%' type ='search' 
-                            name='search' placeholder='Rechercher une série'></li></form>";     // barre de recherche
+                            name='search' placeholder='Rechercher un produit'></li></form>";     // barre de recherche
 
                 $search .= "<form method='post' action='?action=display-catalogue&page=1'><li id='trie'>       
                             <select name='trie'>                                                   
@@ -162,7 +162,6 @@ class Dispatcher
                     </head>
                     <header>
                     <ul>
-                        <div id='logodiv'><li><a href='./' id='logo'><img src='' id='logo'></a></li></div>                 
                         <li><a href='?action=display-catalogue&page=1' id='navbar'>Afficher Catalogue</a></li>             
                         <li><a href='?action=profil' id='navbar'>Profil </a></li>                                   
                         <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>

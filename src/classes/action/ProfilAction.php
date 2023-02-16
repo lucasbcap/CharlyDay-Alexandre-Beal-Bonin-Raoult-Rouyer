@@ -2,7 +2,10 @@
 
 namespace custumbox\action;
 use custumbox\action\Action;
+use custumbox\auth\Auth;
 use custumbox\db\ConnectionFactory;
+use custumbox\user\User;
+
 class ProfilAction extends Action
 {
     /**
@@ -23,7 +26,7 @@ class ProfilAction extends Action
         if($this->http_method == 'GET') $res = $this->modifProfil();
         else if ($this->http_method == 'POST') {
             $res = $this->modifProfil();
-            $res .= $this->enregistrerProfil();
+            $this->enregistrerProfil();
             $res .="<h3 style='color:green'>Profil enregistré</h3>";
         }
         return $res;
@@ -48,8 +51,10 @@ class ProfilAction extends Action
                  <input value='".$d['nom']."' id='input' type='text' placeholder='Entrer votre nom' name='nom'>
                  <label><b>Prénom :</b></label>       
                  <input value='".$d['prenom']."' id= 'input' type='text' placeholder='Entrer votre prénom' name='prenom'><br>
-              <center>   <label><b>Téléphone :</b></label>       
-                 <input value='".$d['tel']."' id= 'input' type='text' placeholder='Entrer votre numéro de télélphone' name='telephone'><br></center>
+                 <label><b>Téléphone :</b></label>       
+                 <input value='".$d['tel']."' id= 'input' type='text' placeholder='Entrer votre numéro de télélphone' name='telephone'>
+                 <label><b>Mot de passe :</b></label>       
+                 <input id= 'input' type='password' placeholder='Entrer votre nouveau mot de passe' name='mdp'><br>
                 
                    
                  <input type='submit' value='Sauvegarder'>";
@@ -65,19 +70,35 @@ class ProfilAction extends Action
      * @return string retourne les informations souhaitées
      */
     function enregistrerProfil() : string{
-        $res ="";
-        if(isset($_POST['nom']) && isset($_POST['prenom'])){
+        $res ="oui";
+        if(isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['telephone'])){
+            $user = unserialize($_SESSION['user']);
             $bdd = ConnectionFactory::makeConnection();
+            $c1 = $bdd->prepare("select * from user where login = :login");
+            $c1->bindParam(":login", $user->login);
+            $c1->execute();
+            $d = $c1->fetch();
             $nom = filter_var($_POST['nom']);
+            if($nom == "")$nom=$d['nom'];
             $prenom = filter_var($_POST['prenom']);
+            if($prenom == "") $prenom=$d['prenom'];
             $telephone = filter_var($_POST['telephone']);
-            $loginUser = unserialize($_SESSION['user'])->login;
-            $c2 = $bdd->prepare("update user set nom= ? , prenom=?,telephone = ? where email = ?");
-            $c2->bindParam(1,$nom);
-            $c2->bindParam(2,$prenom);
-            $c2->bindParam(3,$telephone);
-            $c2->bindParam(4,$loginUser);
-            $c2->execute();
+            if($telephone == "") $telephone=$d['tel'];
+            $mdp = filter_var($_POST['mdp']);
+            if($mdp=="") $mdp =$d['mdp'];
+
+                $mdp = password_hash($mdp, PASSWORD_DEFAULT, ['cost' => 12]);
+
+                $loginUser = unserialize($_SESSION['user'])->login;
+                $c2 = $bdd->prepare("update user set nom= ? , prenom=?,tel = ?, passwd = ? where login = ?");
+                $c2->bindParam(1, $nom);
+                $c2->bindParam(2, $prenom);
+                $c2->bindParam(3, $telephone);
+
+                $c2->bindParam(4, $mdp);
+                $c2->bindParam(5, $loginUser);
+                $c2->execute();
+
         }
         return $res;
     }

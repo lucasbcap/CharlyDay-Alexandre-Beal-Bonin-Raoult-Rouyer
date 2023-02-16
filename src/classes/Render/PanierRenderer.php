@@ -10,6 +10,7 @@ class PanierRenderer extends Render
     public function render(int $selector): string
     {
         $prixTot = 0;
+        $empreinteCarbo = 0;
         $res = <<<END
          <h1>Votre panier</h1>
             <table>
@@ -47,10 +48,12 @@ class PanierRenderer extends Render
             }
             $sousTot = $data['qte'] * $data['prix'];
             $prixTot += $sousTot;
+            $empreinteCarbo = $sousTot*$data['distance'];
             $res.= "<td>$sousTot</td></tr>";
 
         }
-        $res .= "</table><br><h1>Prix total : $prixTot</h1>";
+        $res .= "</table><br><h1>Prix total : $prixTot</h1><br>";
+        $res .= "</table><br><h2>Empreinte carbonne : $empreinteCarbo  </h2><br>";
 
         return $res;
     }

@@ -8,6 +8,7 @@ use custumbox\user\User;
 use custumbox\Catalogue\Produit;
 
 
+
 /**
  * class qui gere la gestion de l affichage du catalogue
  */
@@ -75,14 +76,17 @@ class DisplayCatalogueAction extends \custumbox\action\Action
     {
         $res = "";
         if ($this->http_method == "GET") {
+
             $res = "<h1>Catalogue : </h1>";
             $array = User::TrieSQL();
 
             if ($array!=null) {
-                for($id = ($_GET['page']-1)*5; $id<($_GET['page']-1)*5+5;$id++) {
-                    if($id<sizeof($array)) {
-                        $produitCourantRenderer = new CatalogueRender($array[$id]);
-                        $res .= $produitCourantRenderer->render(1);
+                if ($_GET['page'] != "") {
+                    for ($id = ($_GET['page'] - 1) * 5; $id < ($_GET['page'] - 1) * 5 + 5; $id++) {
+                        if ($id < sizeof($array)) {
+                            $produitCourantRenderer = new CatalogueRender($array[$id]);
+                            $res .= $produitCourantRenderer->render(1);
+                        }
                     }
                 }
             }
@@ -91,6 +95,7 @@ class DisplayCatalogueAction extends \custumbox\action\Action
             $res .= "<div class='bouton'><a href='?action=display-catalogue&page=" . ($_GET['page']+1) . "'>Page suivante</a></div>";
             if ($search != "") {
                 $res = $this->rechercher($search);
+
             }
         }
         return $res;
@@ -196,14 +201,14 @@ class DisplayCatalogueAction extends \custumbox\action\Action
      */
     public function rechercher(string $search):string{
         $bdd = ConnectionFactory::makeConnection();
-        $c1 = $bdd->prepare("SELECT * from serie where titre like :s");
+        $c1 = $bdd->prepare("SELECT * from produit where nomProd like :s");
         $search = "%".$search."%";
         $c1->bindParam(":s",$search);
         $c1->execute();
         $rendu = "";
         while ($d = $c1->fetch()) {
-            $serie = new Serie($d['titre'], $d['img'], $d['genre'], $d['publicVise'], $d['descriptif'], $d['annee'], $d['date_ajout'], $d['id']);
-            $render = new CatalogueRender($serie);
+            $produit = new Produit($d['id'],$d['nomProd'],$d['prix'],$d['poids'],$d['description'],$d['detail'],$d['lieu'],$d['distance'],$d['img'],$d['latitude'],$d['longitude'],5,$d['categorie']);
+            $render = new CatalogueRender($produit);
             $rendu .= $render->render();
         }
         if ($rendu == "") {
