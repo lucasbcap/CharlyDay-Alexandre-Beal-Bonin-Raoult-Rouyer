@@ -3,8 +3,10 @@
 
 namespace custumbox\dispatcher;
 use custumbox\action\AddCommentAction;
+use custumbox\action\AdminAction;
 use custumbox\action\DisplayCatalogueAction;
 use custumbox\action\AddUserAction;
+use custumbox\action\DisplayMembreAction;
 use custumbox\action\DisplayPanierAction;
 use custumbox\action\DisplayPrincipaleAction;
 use custumbox\action\PanierAction;
@@ -14,6 +16,7 @@ use custumbox\action\MotDePasseOubAction;
 use custumbox\action\ProfilAction;
 use custumbox\action\PrefereAction;
 use custumbox\action\AjoutAction;
+use custumbox\db\ConnectionFactory;
 use custumbox\action\DisplayProduitAction;
 
 class Dispatcher
@@ -61,6 +64,13 @@ class Dispatcher
                     $act = new AddCommentAction();
                     $html = $act->execute();
                     break;
+                case 'allUser':           // affichage series
+                  $act = new DisplayMembreAction(0);
+                  $html = $act->execute();
+                  break;
+                case 'display-episode':         // affichage episodes
+                  //  $act = new DisplayEpisodeAction();
+                  //  $html = $act->execute();
                 case 'display-article':         // affichage episodes
                   $act = new DisplayProduitAction();
                   $html = $act->execute();
@@ -89,6 +99,15 @@ class Dispatcher
                     $act = new DeconnexionAction();
                     $html = $act->execute();
                     break;
+                case 'userAvancer':
+                    $act = new DisplayMembreAction(1);
+                    $html = $act->execute();
+                    break;
+                case 'droit':
+                    echo 'ne marche pas';
+                    //$act = new AdminAction();
+                    //$html = $act->execute();
+                    //break;
                 default:                        // accueil
                     $act = new DisplayPrincipaleAction();
                     $html = $act->execute();
@@ -149,7 +168,7 @@ class Dispatcher
             // peut afficher le catalogue
             // modifier son profil
             // se deconnecter
-            return "<!DOCTYPE html>                     
+            $rese = "<!DOCTYPE html>                     
                     <html lang='fr'>    
                     <head>
                         <title>NetVOD</title>
@@ -165,14 +184,31 @@ class Dispatcher
                         <li><a href='?action=profil' id='navbar'>Profil </a></li>                                   
                         <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>
                         <li><a href='?action=panier' id='navbar'>Panier</a></li>                            
-                        $search
-                             
+                        ";
+            $bd = ConnectionFactory::makeConnection();
+
+
+            $requete = <<<END
+                    select * from user 
+                    where user.login = ?;
+                    END;
+            $requete = $bd->prepare($requete);
+            $user = unserialize($_SESSION['user']);
+            $log = $user->login;
+            $requete->bindParam(1, $log);
+            $requete->execute();
+            $data = $requete->fetch();
+            if ($data['privilege'] == 1){
+                $rese.="<li><a href='?action=allUser' id='navbar'>liste des membres</a></li>";
+            }
+            $rese .= "$search      
                     </ul>
                     </header>
-                    <body>
-                    $res
-                    </body>
+                        <body>
+                        $res
+                        </body>
                     </html>";
+            return $rese;
         } else {                    // si l'user n'est pas connecte
 
             // peut se connecter

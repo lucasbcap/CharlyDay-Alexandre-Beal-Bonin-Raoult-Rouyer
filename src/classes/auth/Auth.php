@@ -68,7 +68,7 @@ class Auth
         }else{
             $prenom = null;
         }
-        $c2 = $bdd->prepare("insert into user values(:login,:pass,:email,:nom,:prenom,:tel,:token)");
+        $c2 = $bdd->prepare("insert into user values(:login,:pass,:email,:nom,:prenom,:tel,:token, 0)");
         $c2->bindParam(":login", $login,);
         $pass = password_hash($pass, PASSWORD_DEFAULT, ['cost' => 12]);
         $c2->bindParam(":pass", $pass);

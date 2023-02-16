@@ -14,7 +14,7 @@ class DisplayPrincipaleAction extends Action
     public function execute(): string
     {
 
-        $res="test";
+        $res="";
         return $res;
 
     }
