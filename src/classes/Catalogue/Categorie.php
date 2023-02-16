@@ -1,6 +1,6 @@
 <?php
 
-namespace customBox\classes\Produit;
+namespace customBox\classes\Catalogue;
 
 use customBox\classes\db\ConnectionFactory;
 

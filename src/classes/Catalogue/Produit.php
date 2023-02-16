@@ -1,11 +1,13 @@
 <?php
 
-namespace customBox\Produit;
+namespace custumBox\Catalogue;
+use custumbox\db\ConnectionFactory;
+
 class Produit {
 
     protected int $id;
     protected String $nom;
-    protected double $prix;
+    protected float $prix;
     protected String $poids;
     protected String $description;
     protected String $detail;
@@ -15,9 +17,9 @@ class Produit {
     protected float $latitude;
     protected float $longitude;
     protected int $stock;
-    protected Categorie $categorie;
+    protected int $categorie;
 
-    public function __construct(int $id, String $nom, double $prix, String $poids, String $description, String $detail, String $lieu, int $distance, String $image, float $latitude, float $longitude, int $stock, Categorie $categorie) {
+    public function __construct(int $id, String $nom, float $prix, String $poids, String $description, String $detail, String $lieu, int $distance, String $image, float $latitude, float $longitude, int $stock, int $categorie) {
         $this->id = $id;
         $this->nom = $nom;
         $this->prix = $prix;
@@ -47,6 +49,16 @@ class Produit {
         }else {
             throw new \Exception("$at: invalid property");
         }
+    }
+
+    public static function creerProduit(int $id){
+        $bdd = ConnectionFactory::makeConnection();
+        $req1 = $bdd->prepare("Select * from produit where id=:id"); //requete sql afin de récupérer toutes les valeurs d'une serie en fonction de l'id dans la base de données
+        $req1->bindParam(":id", $id);
+        $req1->execute();
+        $d = $req1->fetch();
+        //on enregistre les données de la base de données dans la serie
+        return new Produit($d['id'],$d['nom'], $d['prix'], $d['poids'], $d['description'], $d['detail'],$d['lieu'], $d['distance'], "img/".$d['id'].".jpg", $d['latitude'], $d['longitude'], 0, $d['categorie']);
     }
 
 }
