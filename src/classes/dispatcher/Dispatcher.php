@@ -3,6 +3,8 @@
 
 namespace custumbox\dispatcher;
 use custumbox\action\AddUserAction;
+use custumbox\action\DisplayPrincipaleAction;
+use custumbox\action\SigninAction;
 class Dispatcher
 {
     protected ?string $action = null;
@@ -22,17 +24,17 @@ class Dispatcher
     public function run(): void
     {
         $act = $this->action;
-       // if (!isset($_SESSION['user']) && $act != 'sign-in' && $act != 'add-user' && $act != 'mdpoub') {    //si l'utilisateur n'est pas connecté et si il n'esssaye pas de s'inscrire ou de se connecter
-       //     $html = "<div class='grayscale'><div id='st'></dib><img src='Image/logo.png' id='bienvenue'></div></div><h1 id='wel'>Bienvenue</h1>          ";     // affichage de bienvenue
-       // } else {
+        if (!isset($_SESSION['user']) && $act != 'sign-in' && $act != 'add-user' && $act != 'mdpoub') {    //si l'utilisateur n'est pas connecté et si il n'esssaye pas de s'inscrire ou de se connecter
+            $html = "<div class='grayscale'><div id='st'></dib></div></div><h1 id='wel'>Bienvenue</h1>          ";     // affichage de bienvenue
+        } else {
             switch ($act) {
                 case 'add-user':                // inscription
                     $act = new AddUserAction();
                    $html = $act->execute();
                     break;
                 case 'sign-in':                 //connexion
-                  //  $act = new SigninAction();
-                  //  $html = $act->execute();
+                    $act = new SigninAction();
+                    $html = $act->execute();
                     break;
                 case 'display-catalogue':       // affichage catalogue
                    // $act = new DisplayCatalogueAction();
@@ -67,17 +69,16 @@ class Dispatcher
                   //  $html = $act->execute();
                     break;
                 default:                        // accueil
-                  //  $act = new DisplayPrincipaleAction();
-                  //  $html = $act->execute();
+                    $act = new DisplayPrincipaleAction();
+                    $html = $act->execute();
                     break;
             }
-     //   }
-     //   print($this->renderPage($html));
+       }
+        print($this->renderPage($html));
     }
 
     private function renderPage(string $res): string
     {
-
         if (isset($_SESSION['user'])) {         // si l'utilisateur est connecte
             $search = "";
             if ($this->action == 'display-catalogue') {         //si affichage du catalogue
