@@ -272,6 +272,10 @@ input[type="text"], input[type="password"], input[type=email], input[type=search
     background-color: #f8f8f8;
 }
 
+div#btn-modif{
+    display: flex;
+}
+
 input[type="submit"] {
     display: block;
     margin: 0 auto;

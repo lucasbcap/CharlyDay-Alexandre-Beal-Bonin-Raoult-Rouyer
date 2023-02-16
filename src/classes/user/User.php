@@ -147,4 +147,11 @@ class User
         $query->bindParam(3, $qte);
         return $query->execute();
     }
+
+    public function mettreAdmin(){
+        $db = ConnectionFactory::makeConnection();
+        $query = $db->prepare("update user set privilige = 1 where login = ?");
+        $query->bindParam(1, $this->login);
+        return $query->execute();
+    }
 }

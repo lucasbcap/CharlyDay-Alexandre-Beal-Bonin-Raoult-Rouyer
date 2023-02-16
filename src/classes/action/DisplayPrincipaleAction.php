@@ -2,7 +2,7 @@
 
 namespace custumbox\action;
 use custumbox\action\Action;
-use custumbox\Render\CatalogueRender;
+use custumbox\render\CatalogueRender;
 
 class DisplayPrincipaleAction extends Action
 {
@@ -28,7 +28,7 @@ class DisplayPrincipaleAction extends Action
                 $res .= "Aucun produit en favori";
             }
 
-        }
+        $res="test";
         return $res;
 
     }
