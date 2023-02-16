@@ -14,6 +14,7 @@ use custumbox\action\MotDePasseOubAction;
 use custumbox\action\ProfilAction;
 use custumbox\action\PrefereAction;
 use custumbox\action\AjoutAction;
+use custumbox\action\DisplayProduitAction;
 
 class Dispatcher
 {
@@ -60,13 +61,9 @@ class Dispatcher
                     $act = new AddCommentAction();
                     $html = $act->execute();
                     break;
-                case 'display-serie':           // affichage series
-                  //  $act = new DisplaySerieAction();
-                  //  $html = $act->execute();
-                    break;
-                case 'display-episode':         // affichage episodes
-                  //  $act = new DisplayEpisodeAction();
-                  //  $html = $act->execute();
+                case 'display-article':         // affichage episodes
+                  $act = new DisplayProduitAction();
+                  $html = $act->execute();
                     break;
                 case 'profil':                  // gestion du profil
                     $act = new ProfilAction();
@@ -108,7 +105,7 @@ class Dispatcher
             $this->action = explode("&",$this->action)[0];
             if ($this->action == 'display-catalogue') {         //si affichage du catalogue
                 $search = "<div id='catalogue'><form method='post' action='?action=display-catalogue&page=1'><li id='searchbar'><input size='30%' type ='search' 
-                            name='search' placeholder='Rechercher un produit'></li></form>";     // barre de recherche
+                            name='search' placeholder='Rechercher une série'></li></form>";     // barre de recherche
 
                 $search .= "<form method='post' action='?action=display-catalogue&page=1'><li id='trie'>       
                             <select name='trie'>                                                   
@@ -162,6 +159,8 @@ class Dispatcher
                     </head>
                     <header>
                     <ul>
+                        <div id='logodiv'><li><a href='./' id='logo'><img src='image/court-circuit-logo-allonge-jaune-vert.jpg' id='logo'></a></li></div>                 
+                        <li><a href='?action=' id='navbar'>Accueil</a></li> 
                         <li><a href='?action=display-catalogue&page=1' id='navbar'>Afficher Catalogue</a></li>             
                         <li><a href='?action=profil' id='navbar'>Profil </a></li>                                   
                         <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>
