@@ -110,14 +110,11 @@ class Dispatcher
                 $search .= "<form method='post' action='?action=display-catalogue&page=1'><li id='trie'>       
                             <select name='trie'>                                                   
                             <option value='---'>---</option>
-                            <option value='titre'>Titre</option>
-                            <option value='genre'>Genre</option>
-                            <option value='public vise'>Public Visé</option>
-                            <option value='annee'>Année</option>
-                            <option value='date ajout'>Date Ajout</option>
-                            <option value='moyenne'>Moyenne</option>
+                            <option value='titre'>categorie</option>
+                            <option value='genre'>prix</option>
                             </select>
-                            <button name='bnt1'>Trier</button>
+                           
+                            <input type='submit' value='Trier'>Trier</input>
                             </li></form>";                                      // Choix du tri a effectuer dans l'affichage du catalogue
 
                 // choix du type de public
@@ -139,7 +136,7 @@ class Dispatcher
                             <option value='sport'>Sport</option>
                             <option value='nostalgie'>Nostalgie</option>
                             </select>
-                            <button name='bnt1'>Filtré</button>
+                            <input type='submit' name='bnt1'>Filtré</input>
                             </li>
                             </form></div>";                                 // choix du genre de series
 

@@ -294,3 +294,6 @@ input[type=submit]:hover {
     border: 1px solid #144F48;
 }
 
+#catalogue{
+    width : 100%;
+}

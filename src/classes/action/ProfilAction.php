@@ -48,9 +48,9 @@ class ProfilAction extends Action
         $res = "<h2>Profil : </h2> ";
         $res .= "<form id='formPro' action='?action=profil' method='POST' >
                  <label><b>Nom : </b></label>
-                 <input value='".$d['nom']."' id='input' type='text' placeholder='Entrer votre nom' name='nom'>
+                 <input value='".$d['nomUser']."' id='input' type='text' placeholder='Entrer votre nom' name='nom'>
                  <label><b>Prénom :</b></label>       
-                 <input value='".$d['prenom']."' id= 'input' type='text' placeholder='Entrer votre prénom' name='prenom'><br>
+                 <input value='".$d['prenomUser']."' id= 'input' type='text' placeholder='Entrer votre prénom' name='prenom'><br>
                  <label><b>Téléphone :</b></label>       
                  <input value='".$d['tel']."' id= 'input' type='text' placeholder='Entrer votre numéro de télélphone' name='telephone'>
                  <label><b>Mot de passe :</b></label>       
@@ -90,7 +90,7 @@ class ProfilAction extends Action
                 $mdp = password_hash($mdp, PASSWORD_DEFAULT, ['cost' => 12]);
 
                 $loginUser = unserialize($_SESSION['user'])->login;
-                $c2 = $bdd->prepare("update user set nom= ? , prenom=?,tel = ?, passwd = ? where login = ?");
+                $c2 = $bdd->prepare("update user set nomUser= ? , prenomUser=?,tel = ?, passwd = ? where login = ?");
                 $c2->bindParam(1, $nom);
                 $c2->bindParam(2, $prenom);
                 $c2->bindParam(3, $telephone);

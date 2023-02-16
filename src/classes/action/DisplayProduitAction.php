@@ -5,7 +5,7 @@ namespace custumbox\action;
 use custumbox\action\Action;
 use custumbox\Catalogue\Produit;
 use  custumbox\db\ConnectionFactory;
-use  custumbox\render\ProduitRender;
+use  custumbox\Render\ProduitRender;
 
 
 /**
