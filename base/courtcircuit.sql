@@ -39,10 +39,12 @@ CREATE TABLE `favori` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user` (
+    `login` varchar(20) NOT NULL
   `email` varchar(256) NOT NULL,
   `passwd` varchar(256) NOT NULL,
   `nom` varchar(20) DEFAULT NULL,
   `prenom` varchar(20) DEFAULT NULL,
+  `tel` varchar(20) DEFAULT NULL,
   `token` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

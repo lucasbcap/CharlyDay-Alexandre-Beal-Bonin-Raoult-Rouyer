@@ -5,6 +5,10 @@ namespace custumbox\dispatcher;
 use custumbox\action\AddUserAction;
 use custumbox\action\DisplayPrincipaleAction;
 use custumbox\action\SigninAction;
+use custumbox\action\DeconnexionAction;
+use custumbox\action\MotDePasseOubAction;
+use custumbox\action\ProfilAction;
+
 class Dispatcher
 {
     protected ?string $action = null;
@@ -49,8 +53,8 @@ class Dispatcher
                   //  $html = $act->execute();
                     break;
                 case 'profil':                  // gestion du profil
-                  //  $act = new ProfilAction();
-                  //  $html = $act->execute();
+                    $act = new ProfilAction();
+                    $html = $act->execute();
                     break;
                 case 'prefere':                 // gestion de la liste des preferes
                  //   $act = new PrefereAction();
@@ -61,12 +65,12 @@ class Dispatcher
                  //   $html = $act->execute();
                     break;
                 case 'mdpoub':                  // gestion mot de passe oublie lors de l'inscription
-                 //   $act = new MotDePasseOubAction();
-                 //   $html = $act->execute();
+                    $act = new MotDePasseOubAction();
+                    $html = $act->execute();
                     break;
                 case 'deconnexion':             // gestion de la deconnexion
-                  //  $act = new DeconnexionAction();
-                  //  $html = $act->execute();
+                    $act = new DeconnexionAction();
+                    $html = $act->execute();
                     break;
                 default:                        // accueil
                     $act = new DisplayPrincipaleAction();
