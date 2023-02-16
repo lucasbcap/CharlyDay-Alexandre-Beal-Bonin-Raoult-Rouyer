@@ -9,6 +9,8 @@ use custumbox\action\SigninAction;
 use custumbox\action\DeconnexionAction;
 use custumbox\action\MotDePasseOubAction;
 use custumbox\action\ProfilAction;
+use custumbox\action\PrefereAction;
+use custumbox\action\AjoutAction;
 
 class Dispatcher
 {
@@ -64,8 +66,12 @@ class Dispatcher
                     $html = $act->execute();
                     break;
                 case 'prefere':                 // gestion de la liste des preferes
-                 //   $act = new PrefereAction();
-                 //   $html = $act->execute();
+                 $act = new PrefereAction();
+                 $html = $act->execute();
+                    break;
+                case 'ajout':                 // gestion de la liste des preferes
+                    $act = new AjoutAction();
+                    $html = $act->execute();
                     break;
                 case 'display-commentaire':     // affichage des commentaires et gestion
                  //   $act = new DisplayCommentaireAction();

@@ -48,14 +48,18 @@ class CatalogueRender extends Render
             //Affichage
             $produitRender = new ProduitRender($this->produit);
             $res = $produitRender->render(1);
+            $res .="<form id='ajout' action='?action=ajout&id=" . $this->produit->id . "' method='POST'>
+                    <input type='number' name='qte' value='1'><br>
+                    <input type='submit' value='Ajouter au panier'><br>
+                    </form>";
 
             //En favori ou non
 
             $array = unserialize($_SESSION['user'])->getSQL("favori");
             $trouve = false;
             if($array!=null) {
-                foreach ($array as $serie) {
-                    if ($this->serie->id === $serie->id) $trouve = true;
+                foreach ($array as $produit) {
+                    if ($this->produit->id === $produit->id) $trouve = true;
                 }
             }
              if($trouve){

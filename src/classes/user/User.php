@@ -77,8 +77,8 @@ class User
     function suppSQL(int $id, string $table)
     {
         $bdd = ConnectionFactory::makeConnection();
-        $c1 = $bdd->prepare("DELETE FROM $table WHERE email=:mail AND idProduit=:id;");
-        $c1->bindParam(":mail", $this->email);
+        $c1 = $bdd->prepare("DELETE FROM $table WHERE login=:login AND idProduit=:id;");
+        $c1->bindParam(":login", $this->login);
         $c1->bindParam(":id", $id);
         $c1->execute();
     }
@@ -87,18 +87,17 @@ class User
      * Inserer dans une table un nouvel element grace a son id (ne fonctionne que pour estfini/encours/favori)
      * @param int $id id d'une serie que l'on veut inserer
      * @param string $table table ou l'on veut ajoute
-     * @param int $idEpisode Numero de l'episode si la table selectionne est 'encours'
      * @return void
      */
-    function addSQL(int $id, string $table, int $idEpisode = 0): void
+    function addSQL(int $id, string $table): void
     {
         $bdd = ConnectionFactory::makeConnection();
 
-        $query = "Select * from $table where email=:mail and idProduit=:id";
-        $insert = "insert into $table values (:email,:id)";
+        $query = "Select * from $table where login=:login and idProduit=:id";
+        $insert = "insert into $table values (:login,:id)";
 
         $c = $bdd->prepare($query);
-        $c->bindParam(":mail", $this->email);
+        $c->bindParam(":login", $this->login);
         $c->bindParam(":id", $id);
 
         $c->execute();
@@ -113,7 +112,7 @@ class User
         //Si elle n'existe pas on l'insert
         if ($verif) {
             $c1 = $bdd->prepare($insert);
-            $c1->bindParam(":email", $this->email);
+            $c1->bindParam(":login", $this->login);
             $c1->bindParam(":id", $id);
 
             $c1->execute();
