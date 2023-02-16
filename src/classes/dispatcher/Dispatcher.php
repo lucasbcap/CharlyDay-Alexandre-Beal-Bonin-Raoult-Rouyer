@@ -2,9 +2,12 @@
 
 
 namespace custumbox\dispatcher;
+use custumbox\action\AddCommentAction;
 use custumbox\action\DisplayCatalogueAction;
 use custumbox\action\AddUserAction;
+use custumbox\action\DisplayPanierAction;
 use custumbox\action\DisplayPrincipaleAction;
+use custumbox\action\PanierAction;
 use custumbox\action\SigninAction;
 use custumbox\action\DeconnexionAction;
 use custumbox\action\MotDePasseOubAction;
@@ -53,6 +56,10 @@ class Dispatcher
                    $act = new DisplayCatalogueAction();
                    $html = $act->execute();
                     break;
+                case "add-comment" :
+                    $act = new AddCommentAction();
+                    $html = $act->execute();
+                    break;
                 case 'display-serie':           // affichage series
                   //  $act = new DisplaySerieAction();
                   //  $html = $act->execute();
@@ -73,9 +80,9 @@ class Dispatcher
                     $act = new AjoutAction();
                     $html = $act->execute();
                     break;
-                case 'display-commentaire':     // affichage des commentaires et gestion
-                 //   $act = new DisplayCommentaireAction();
-                 //   $html = $act->execute();
+                case 'panier':     // affichage du panier
+                    $act = new DisplayPanierAction();
+                    $html = $act->execute();
                     break;
                 case 'mdpoub':                  // gestion mot de passe oublie lors de l'inscription
                     $act = new MotDePasseOubAction();
@@ -158,7 +165,8 @@ class Dispatcher
                         <div id='logodiv'><li><a href='./' id='logo'><img src='' id='logo'></a></li></div>                 
                         <li><a href='?action=display-catalogue&page=1' id='navbar'>Afficher Catalogue</a></li>             
                         <li><a href='?action=profil' id='navbar'>Profil </a></li>                                   
-                        <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>                         
+                        <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>
+                        <li><a href='?action=panier' id='navbar'>Panier</a></li>                            
                         $search
                              
                     </ul>
