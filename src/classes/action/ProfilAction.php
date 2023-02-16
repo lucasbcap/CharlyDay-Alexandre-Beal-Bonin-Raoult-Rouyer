@@ -37,10 +37,10 @@ class ProfilAction extends Action
         $user = unserialize($_SESSION['user']);
         $bdd = ConnectionFactory::makeConnection();
         $c1 = $bdd->prepare("select * from user where login = :login");
-        $c1->bindParam(":login", $user->login);
+        $login = $user->login;
+        $c1->bindParam(":login",$login );
         $c1->execute();
         $d = $c1->fetch();
-        //$userN = User::getUser($user->login);
 
         $res = "<h2>Profil : </h2> ";
         $res .= "<form id='formPro' action='?action=profil' method='POST' >
