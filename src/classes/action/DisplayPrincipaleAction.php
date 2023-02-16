@@ -13,6 +13,8 @@ class DisplayPrincipaleAction extends Action
     public function execute(): string
     {
         $res = "CECI EST LA PAGE DE BASE";
+        
+
         return $res;
 
     }
