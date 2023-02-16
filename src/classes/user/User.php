@@ -6,7 +6,11 @@ use custumbox\Catalogue\Produit;
 use custumbox\db\ConnectionFactory as ConnectionFactory;
 use iutnc\netvod\video\Serie;
 
+use custumbox\Catégorie\Categorie;
 
+/**
+ * Classe User
+ */
 class User
 {
     protected string $email, $passwrd, $token;
@@ -58,5 +62,65 @@ class User
             }
         }
         return $array;
+    }
+
+    /**
+     * Supprime une ligne dans une table de notre base de donnee grace à son ID (ne fonctionne que pour estfini/encours/favori)
+     * @param int $id id de la ligne que l'on veut supprimer
+     * @param string $table table que l'on veut modifie
+     * @return void
+     */
+    function suppSQL(int $id, string $table)
+    {
+        $bdd = ConnectionFactory::makeConnection();
+        $c1 = $bdd->prepare("DELETE FROM $table WHERE email=:mail AND idProduit=:id;");
+        $c1->bindParam(":mail", $this->email);
+        $c1->bindParam(":id", $id);
+        $c1->execute();
+    }
+
+    /**
+     * Inserer dans une table un nouvel element grace a son id (ne fonctionne que pour estfini/encours/favori)
+     * @param int $id id d'une serie que l'on veut inserer
+     * @param string $table table ou l'on veut ajoute
+     * @param int $idEpisode Numero de l'episode si la table selectionne est 'encours'
+     * @return void
+     */
+    function addSQL(int $id, string $table, int $idEpisode = 0): void
+    {
+        $bdd = ConnectionFactory::makeConnection();
+
+        $query = "Select * from $table where email=:mail and idProduit=:id";
+        $insert = "insert into $table values (:email,:id)";
+
+        $c = $bdd->prepare($query);
+        $c->bindParam(":mail", $this->email);
+        $c->bindParam(":id", $id);
+
+        $c->execute();
+
+
+        $verif = true;
+        //On verifie que la donné que l'on veut inserer n'existe pas deja
+        while ($d = $c->fetch()) {
+            $verif = false;
+        }
+
+        //Si elle n'existe pas on l'insert
+        if ($verif) {
+            $c1 = $bdd->prepare($insert);
+            $c1->bindParam(":email", $this->email);
+            $c1->bindParam(":id", $id);
+
+            $c1->execute();
+        }
+    }
+
+    public function __get(string $at):mixed {
+        if (property_exists($this, $at)) {
+            return $this->$at;
+        }else {
+            throw new \Exception("$at: invalid property");
+        }
     }
 }
