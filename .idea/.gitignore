@@ -8,7 +8,7 @@
 /dataSources.local.xml
 
 composer.phar
-./vendor
+vendor/*
 
 #projet phpStorm
 *.jar
