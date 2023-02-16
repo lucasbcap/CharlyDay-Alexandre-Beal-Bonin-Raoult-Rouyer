@@ -103,6 +103,10 @@ class CatalogueRender extends Render
                     </div>";
         }
 
+        //On creer un bouton pour changer de page
+        $res .= "<div class='bouton'><a href='?action=display-catalogue&page=" . ($_GET['page']-1) . "'>Page précédente</a></div>";
+        $res .= "<div class='bouton'><a href='?action=display-catalogue&page=" . ($_GET['page']+1) . "'>Page suivante</a></div>";
+
         return $res;
     }
 }
