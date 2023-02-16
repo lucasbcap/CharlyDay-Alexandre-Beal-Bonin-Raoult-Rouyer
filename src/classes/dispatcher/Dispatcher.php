@@ -28,10 +28,11 @@ class Dispatcher
      */
     public function run(): void
     {
-        $act = $this->action;
+        $act = explode("&",$this->action)[0];
         if (!isset($_SESSION['user']) && $act != 'sign-in' && $act != 'add-user' && $act != 'mdpoub') {    //si l'utilisateur n'est pas connecté et si il n'esssaye pas de s'inscrire ou de se connecter
             $html = "<div class='grayscale'><div id='st'></dib></div></div><h1 id='wel'>Bienvenue</h1>          ";     // affichage de bienvenue
         } else {
+
             switch ($act) {
                 case 'add-user':                // inscription
                     $act = new AddUserAction();
@@ -86,11 +87,12 @@ class Dispatcher
     {
         if (isset($_SESSION['user'])) {         // si l'utilisateur est connecte
             $search = "";
+            $this->action = explode("&",$this->action)[0];
             if ($this->action == 'display-catalogue') {         //si affichage du catalogue
-                $search = "<div id='catalogue'><form method='post' action='?action=display-catalogue'><li id='searchbar'><input size='30%' type ='search' 
+                $search = "<div id='catalogue'><form method='post' action='?action=display-catalogue&page=1'><li id='searchbar'><input size='30%' type ='search' 
                             name='search' placeholder='Rechercher une série'></li></form>";     // barre de recherche
 
-                $search .= "<form method='post' action='?action=display-catalogue'><li id='trie'>       
+                $search .= "<form method='post' action='?action=display-catalogue&page=1'><li id='trie'>       
                             <select name='trie'>                                                   
                             <option value='---'>---</option>
                             <option value='titre'>Titre</option>
@@ -105,7 +107,7 @@ class Dispatcher
 
                 // choix du type de public
 
-                $search .= "<form method='post' action='?action=display-catalogue'><li id='filtre'>
+                $search .= "<form method='post' action='?action=display-catalogue&page=1'><li id='filtre'>
 
                             <select name='filtre1'>
                             <option value='public viseF'>Type de publique</option>
@@ -143,7 +145,7 @@ class Dispatcher
                     <header>
                     <ul>
                         <div id='logodiv'><li><a href='./' id='logo'><img src='Image/logo.png' id='logo'></a></li></div>                 
-                        <li><a href='?action=display-catalogue' id='navbar'>Afficher Catalogue</a></li>             
+                        <li><a href='?action=display-catalogue&page=1' id='navbar'>Afficher Catalogue</a></li>             
                         <li><a href='?action=profil' id='navbar'>Profil </a></li>                                   
                         <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>                         
                         $search

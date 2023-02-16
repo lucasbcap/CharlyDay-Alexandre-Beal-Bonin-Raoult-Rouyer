@@ -79,9 +79,11 @@ class DisplayCatalogueAction extends \custumbox\action\Action
             $array = User::TrieSQL();
 
             if ($array!=null) {
-                foreach ($array as $d) {
-                    $produitCourantRenderer = new CatalogueRender($d);
-                    $res .= $produitCourantRenderer->render(1);
+                for($id = ($_GET['page']-1)*5; $id<($_GET['page']-1)*5+5;$id++) {
+                    if($id<sizeof($array)) {
+                        $produitCourantRenderer = new CatalogueRender($array[$id]);
+                        $res .= $produitCourantRenderer->render(1);
+                    }
                 }
             }
             if ($search != "") {
