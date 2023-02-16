@@ -30,7 +30,12 @@ class Dispatcher
     {
         $act = explode("&",$this->action)[0];
         if (!isset($_SESSION['user']) && $act != 'sign-in' && $act != 'add-user' && $act != 'mdpoub') {    //si l'utilisateur n'est pas connecté et si il n'esssaye pas de s'inscrire ou de se connecter
-            $html = "<div class='grayscale'><div id='st'></dib></div></div><h1 id='wel'>Bienvenue</h1>          ";     // affichage de bienvenue
+            $html = "<div class='background'>
+                        <img src='image/backgroundPageAccueil.png' alt='Background Image'>
+                     </div>
+                     <div class='content'>
+                        <p id='wel'> Bienvenue sur le site <br><br> Court-Circuit Nancy<br>le local à vivre(s) !<br>
+                     </div>";
         } else {
 
             switch ($act) {
@@ -140,11 +145,11 @@ class Dispatcher
                         <title>NetVOD</title>
                         <meta charset='UTF-8' />
                         <link rel='stylesheet' href='css/style.css'>
-                        <link rel='icon' type='image/png' sizes='16x16' href='Image/logoWeb.png'>
+                        <link rel='icon' type='image/png' sizes='16x16' href=''>
                     </head>
                     <header>
                     <ul>
-                        <div id='logodiv'><li><a href='./' id='logo'><img src='Image/logo.png' id='logo'></a></li></div>                 
+                        <div id='logodiv'><li><a href='./' id='logo'><img src='' id='logo'></a></li></div>                 
                         <li><a href='?action=display-catalogue&page=1' id='navbar'>Afficher Catalogue</a></li>             
                         <li><a href='?action=profil' id='navbar'>Profil </a></li>                                   
                         <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>                         
@@ -163,14 +168,15 @@ class Dispatcher
             return "<!DOCTYPE html>
                     <html lang='fr'>
                     <head>
-                        <title>NetVOD</title>
+                        <title>CourtCircuit</title>
                         <meta charset='UTF-8' />
                         <link rel='stylesheet' href='css/style.css'>
                         <link rel='icon' type='image/png' sizes='16x16' href='Image/logoWeb.png'>
+                        <script src='PageAccueil.js' defer></script>
                     </head>
                     <header>
                     <ul>
-                        <div id='logodiv'><li><a href='./' id='logo'><img src='Image/logo.png' id='logo'></a></li></div>        
+                        <li><a href='./' id='logo'><img src='image/court-circuit-logo-allonge-jaune-vert.jpg' id='logo'></a></li>     
                         <li><a href='?action=sign-in' id='navbar'>Connexion</a></li>                
                         <li><a href='?action=add-user' id='navbar'>Inscription</a></li>              
                     </ul>

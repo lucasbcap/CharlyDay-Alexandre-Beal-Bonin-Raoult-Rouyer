@@ -55,8 +55,8 @@ class User
     function getSQL(string $table): ?array
     {
         $bdd = ConnectionFactory::makeConnection();
-        $c1 = $bdd->prepare("select idProduit from $table where email = :email");
-        $c1->bindParam(":email", $this->email);
+        $c1 = $bdd->prepare("select idProduit from $table where login = :login");
+        $c1->bindParam(":login", $this->login);
         $c1->execute();
         $array = null;
         while ($d = $c1->fetch()) {
