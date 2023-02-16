@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS `produit`;
 CREATE TABLE produit (
   id int(11) NOT NULL,
   categorie int(11) NOT NULL,
-  nom text NOT NULL,
+  nomProd text NOT NULL,
   prix decimal(4,2) NOT NULL,
   poids int(11) NOT NULL,
   description text NOT NULL,
@@ -30,13 +30,13 @@ DROP TABLE IF EXISTS `commentaire`;
 CREATE TABLE commentaire (
   `comm` varchar(1000) DEFAULT NULL,
   `note` int(11) NOT NULL,
-  `email` varchar(256) NOT NULL,
+  `login` varchar(256) NOT NULL,
   `idProduit` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `favori`;
 CREATE TABLE `favori` (
-  `email` varchar(256) NOT NULL,
+  `login` varchar(256) NOT NULL,
   `idProduit` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -45,16 +45,17 @@ CREATE TABLE `user` (
     `login` varchar(20) NOT NULL,
   `passwd` varchar(256) NOT NULL,
     `email` varchar(256) NOT NULL,
-    `nom` varchar(20) DEFAULT NULL,
-  `prenom` varchar(20) DEFAULT NULL,
+    `nomUser` varchar(20) DEFAULT NULL,
+  `prenomUser` varchar(20) DEFAULT NULL,
   `tel` varchar(20) DEFAULT NULL,
   `token` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `panier`;
 CREATE TABLE `panier` (
-  `email` varchar(256) NOT NULL,
-  `idProduit` int(11) NOT NULL
+  `login` varchar(256) NOT NULL,
+  `idProduit` int(11) NOT NULL,
+  `qte` int(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO categorie (id, nom) VALUES
@@ -64,7 +65,7 @@ INSERT INTO categorie (id, nom) VALUES
 (4, 'Cosmétiques'),
 (5, 'Produits frais');
 
-INSERT INTO produit (id, categorie, nom, prix, poids, description, detail, lieu, distance, latitude, longitude) VALUES
+INSERT INTO produit (id, categorie, nomProd, prix, poids, description, detail, lieu, distance, latitude, longitude) VALUES
 (1, 1, 'Tablette de chocolat noir 74% aux amandes - Bio Équitable - Vrac', '43.50', 0, 'Ingrédients : Chocolat noir 74%*, amandes toastées*.<p>*Ingrédients issus de l’agriculture biologique <p>Ingrédients issus du commerce équitable<p>Allergènes : Amande<p>Traces possibles de lait, gluten, fruits à coque (noisettes, noix, noix de cajou), soja, sésame, œuf et arachide', 'VALEURS NUTRITIONNELLES MOYENNES POUR 100G<p>Energie 576 kcal - 2387 kJ<p>Matières grasses 45 g<p>(dont acides gras saturés 25 g)<p>Glucides 28 g<p>(dont sucres 24 g)<p>Fibres 14 g<p>Protéines 9,3 g<p>Sel 0,18 g', 'Santeny', 293, 48.725288, 2.572804),
 (2, 1, 'Biscuits apéro Vegan - Curry Gingembre - Bio', '34.90', 0, 'Biscuits apéro 100% bio, clean label, gourmand et sains, riches en protéines végétales et pauvres en sel. A partir d\'une farine de pois cassés bio en provenance d\'Italie.<p>Farine de pois cassés* (15,5%), huile d\'olive*, huile de tournesol désodorisée*, farine de manioc*, fécule de manioc*, farine de coco*, gingembre* (2,5%), curry* (1,2%), sel gris de Guérande, psyllium*<p>*Ingrédients issus de l\'agriculture biologique.<p>Sans colorants, ni conservateurs, ni additifs<p>Allergènes : ce produit est fabriqué dans un atelier qui travaille les fruits à coque (amande, noisette, noix de cajou, noix de pécan)', 'Date de durabilité minimum : 12 mois<p>Énergie : 1707 kJ / 408 Kcal<p>Matières grasses : 26,4 g <p>Dont acides gras saturés : 3,4 g <p>Glucides : 36,4 g <p>Dont sucre : 0,71 g <p>Fibres alimentaires : 7,6 g <p>Protéines : 5,4 g <p>Sel : 1,01 g', 'Villeurbanne', 413, 45.771942, 4.890171),
 (3, 1, 'Lor et nut lait noisette 220g', '7.00', 220, 'Pâte à tartiner Lor & Nut\'s <p>Ingrédients : Noisettes (32.5%), chocolat au lait* (22.85%), sucre (19.6%), huile de tournesol (15%), lait en poudre (4.8%), cacao* (4.8%), sel, fève de Tonka.<p>* Issu du commerce équitable<p>Peut contenir des traces de fruits à coques, lactose et protéines de lait.', 'Notre partenaire fournisseur : Lor & Nut’s<p>Tom et Walé, vos deux écureuils Nancéiens, sont allés ramasser les noisettes cachées l’automne dernier pour vous préparer cette délicieuse pâte à tartiner !<p>Faite avec amour, elle accompagnera vos petits déjeuners et vos goûter.', 'Nancy', 0, 48.692055, 6.184417),
@@ -99,14 +100,13 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`email`);
 
 ALTER TABLE `panier`
-  ADD PRIMARY KEY (`email`,`idProduit`);
+  ADD PRIMARY KEY (`login`,`idProduit`);
 
 ALTER TABLE `favori`
-  ADD PRIMARY KEY (`email`,`idProduit`);
+  ADD PRIMARY KEY (`login`,`idProduit`);
 
 ALTER TABLE `commentaire`
-  ADD PRIMARY KEY (`email`,`idProduit`);
-
+  ADD PRIMARY KEY (`login`,`idProduit`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
