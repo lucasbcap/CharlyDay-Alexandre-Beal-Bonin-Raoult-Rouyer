@@ -39,8 +39,8 @@ class SigninAction extends Action
     <form id='sign' action='?action=sign-in' method='POST'>
         <h1>Connexion</h1>
 
-        <label><b>Email</b></label>
-        <input type='email' placeholder='Entrer votre mail' name='mail' required><br>
+        <label><b>Login</b></label>
+        <input type='text' placeholder='Entrer votre login' name='login' required><br>
 
         <label><b>Mot de passe</b></label>
         <input type='password' placeholder='Entrer le mot de passe' name='password' required><br>
@@ -66,7 +66,7 @@ class SigninAction extends Action
     function signin(): string
     {
         $res = "";
-        if (isset($_POST['mail']) && isset($_POST['password'])) {
+        if (isset($_POST['login']) && isset($_POST['password'])) {
             Auth::authenticate();
             if (unserialize($_SESSION['user']) == null) {
                 header("Location: ?action=sign-in&error=1");

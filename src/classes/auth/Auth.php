@@ -10,11 +10,11 @@ class Auth
 {
     public static function authenticate()
     {
-        $username = filter_var($_POST['mail']);
+        $username = filter_var($_POST['login']);
         $pass = filter_var($_POST['password']);
         $bdd = ConnectionFactory::makeConnection();
-        $c1 = $bdd->prepare("Select passwd, token from user where email=:mail");
-        $c1->bindParam(":mail", $username);
+        $c1 = $bdd->prepare("Select passwd, token from user where login=:login");
+        $c1->bindParam(":login", $username);
         $_SESSION['mdp'] = $pass;
         $c1->execute();
         $mdpbdd = "";
@@ -36,20 +36,22 @@ class Auth
      * @param string $pass son mot de passe
      * @return string log pour valide la reussite
      */
-    public static function register(string $email, string $pass): string
+    public static function register(string $login, string $pass, string $email): string
     {
         $bdd = ConnectionFactory::makeConnection();
-        $token = Auth::generateToken($email);
+        $token = Auth::generateToken($login);
         if ($token==""){
             $token = $_SESSION['token'];
         }
-        $c2 = $bdd->prepare("insert into user values(:email,:pass,null,null,:token);");
-        $c2->bindParam(":email", $email,);
+        $c2 = $bdd->prepare("insert into user values(:login,:pass,:email,null,null,null,:token)");
+        $c2->bindParam(":login", $login,);
         $pass = password_hash($pass, PASSWORD_DEFAULT, ['cost' => 12]);
         $c2->bindParam(":pass", $pass);
+        $c2->bindParam(":email",$email);
         $c2->bindParam(":token", $token);
         $c2->execute();
-        $_POST['mail'] = $email;
+
+        $_POST['login'] = $login;
         $_POST['password'] = $pass;
         Auth::authenticate();
         return "Log";
@@ -79,16 +81,16 @@ class Auth
      * @param string $newMDP nouveau mot de passe
      * @return string renvoie une chaine vide si le mot de passe n'a pas ete modifie, sinon renvoie une chaine de validation
      */
-    public static function changerMDP(string $mailUser, string $newMDP): string
+    public static function changerMDP(string $loginUser, string $newMDP): string
     {
         $bdd = ConnectionFactory::makeConnection();
         $res = "";
         //On verifie la force du mot de passe
         if (self::checkPasswordStrength($newMDP, 4)) {
             $c3 = $bdd->prepare("Update user set passwd =:mdp
-                            where email=:email");
+                            where login=:login");
             $pass = password_hash($newMDP, PASSWORD_DEFAULT, ['cost' => 12]);
-            $c3->bindParam(":email", $mailUser);
+            $c3->bindParam(":login", $loginUser);
             $c3->bindParam(":mdp", $pass);
             $c3->execute();
             session_destroy();
@@ -102,12 +104,12 @@ class Auth
      * @param string $email email de l'user
      * @return string renvoie le token s'il a bien ete genere
      */
-    public static function generateToken(string $email): string
+    public static function generateToken(string $login): string
     {
         $token = "";
         $bdd = ConnectionFactory::makeConnection();
-        $req1 = $bdd->prepare("select * from user where email=:email");
-        $req1->bindParam(":email", $email);
+        $req1 = $bdd->prepare("select * from user where login=:login");
+        $req1->bindParam(":login", $login);
         $req1->execute();
         $verif = false;
         while ($d = $req1->fetch()) {
@@ -115,17 +117,17 @@ class Auth
         }
         $res = "";
         //Si l'email existe ou si l'entree est nouveau (pour valide l'inscription)  on genere un token
-        if ($verif || $email=="new") {
+        if ($verif || $login=="new") {
             $chaine = "a0b1c2d3e4f5g6h7i8j9klmnpqrstuvwxy123456789";
             for ($i = 0; $i < 50; $i++) {
                 $token .= $chaine[rand() % strlen($chaine)];
             }
-            if ($email == "new"){
+            if ($login == "new"){
                 $_SESSION['token'] = $token;
             }
             $res = $token;
-            $req2 = $bdd->prepare("update user set token=:token where email=:email");
-            $req2->bindParam(":email", $email);
+            $req2 = $bdd->prepare("update user set token=:token where login=:login");
+            $req2->bindParam(":login", $login);
             $req2->bindParam(":token", $token);
             $req2->execute();
         }
@@ -140,8 +142,8 @@ class Auth
     public static function activate(string $token): bool
     {
         $bdd = ConnectionFactory::makeConnection();
-        $req1 = $bdd->prepare("select token from user where email=:email");
-        $req1->bindParam(":email", $_SESSION['mail']);
+        $req1 = $bdd->prepare("select token from user where login=:login");
+        $req1->bindParam(":login", $_SESSION['login']);
         $req1->execute();
         $res = false;
         while ($d = $req1->fetch()) {

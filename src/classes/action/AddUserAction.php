@@ -27,7 +27,7 @@ class AddUserAction extends Action
         }else
             if ($this->http_method == 'POST') {
                 switch ($this->verifInscription()) {
-                    case "EmailExist":
+                    case "LoginExist":
                         header("Location: ?action=add-user&error=1");
                         break;
 
@@ -51,12 +51,15 @@ class AddUserAction extends Action
      */
     function inscrit(): string
     {
-        $mail = filter_var($_SESSION['email'], FILTER_SANITIZE_EMAIL);
+        $email = filter_var($_SESSION['email'], FILTER_SANITIZE_EMAIL);
         $pass = $_SESSION['pass'];
-        Auth::register($mail, $pass);
+        $login = $_SESSION['login'];
+
+        Auth::register($login, $pass, $email);
+
         $_SESSION['token'] = null;
         session_destroy();
-        Auth::generateToken($mail);
+        Auth::generateToken($login);
         return "<h2> Vous êtes Inscrit ! </h2>";
     }
 
@@ -70,14 +73,15 @@ class AddUserAction extends Action
         $r = "Log";
         //On garde en session ce que l'utilisateur a ecrit pour plus tard
         $_SESSION['email'] = $_POST['email'];
+        $_SESSION['login'] = $_POST['login'];
         $_SESSION['pass'] = $_POST['pass'];
         $_SESSION['pass2'] = $_POST['pass2'];
         //On verifie que toutes les donnees entre sont bonnes
         if ($_SESSION['pass'] == $_SESSION['pass2']) {
             if (Auth::checkPasswordStrength($_SESSION['pass'], 4)) {
                 $bdd = ConnectionFactory::makeConnection();
-                $c1 = $bdd->prepare("Select * from user where email=:mail");
-                $c1->bindParam(":mail", $email);
+                $c1 = $bdd->prepare("Select * from user where login=:login");
+                $c1->bindParam(":login", $login);
                 $c1->execute();
                 $verif = true;
                 while ($d = $c1->fetch()) {
@@ -86,7 +90,7 @@ class AddUserAction extends Action
                 if ($verif) {
 
                 } else {
-                    $r = "EmailExist";
+                    $r = "LoginExist";
                 }
             } else {
                 $r = "MdpWrong";
@@ -118,15 +122,21 @@ class AddUserAction extends Action
         $res = "
 <form id='sign' method='post' action='?action=add-user'>
 <h1>Inscription</h1>
-                    <label><b>Email</b><input type='email' name='email' placeholder='Email'></label>
-                    <label><b>Mot de passe</b> <input type='password' name='pass' placeholder='Mot de passe'></label>
-                    <label><b>Entrer à nouveau votre mot de passe</b> <input type='password' name='pass2' placeholder='Entrer à nouveau votre mot de passe'></label>
+                    <label><b>Login</b><input type='text' name='login' placeholder='Login' required></label>
+                    <label><b>Mot de passe</b> <input type='password' name='pass' placeholder='Mot de passe'required></label>
+                    <label><b>Entrer à nouveau votre mot de passe</b> <input type='password' name='pass2' placeholder='Entrer à nouveau votre mot de passe'required></label>
+                    <label><b>Email</b><input type='email' name='email' placeholder='Email'required> </label>
+                    <label><b>Téléphone</b><input type='text' name='tel' placeholder='Téléphone (facultatif)'> </label>
+                    <label><b>Nom</b><input type='text' name='nom' placeholder='Nom (facultatif)'> </label>
+                    <label><b>Prénom</b><input type='text' name='prenom' placeholder='Prénom (facultatif)'> </label>
+
                     <input type='submit' id='log' value='INSCRIPTION'>";
+
         //S'il y a des erreurs on ajoutera une ligne supplementaire selon la nature de l'erreur renvoye
         if (isset($_GET['error'])) {
             switch ($_GET['error']) {
                 case 1:
-                    $res .= "<p style='color:red'>Vous avez déjà un compte avec cette adresse mail</p><br>";
+                    $res .= "<p style='color:red'>Vous avez déjà un compte avec ce login</p><br>";
                     break;
 
                 case 2:
