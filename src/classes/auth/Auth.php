@@ -12,6 +12,11 @@ class Auth
     {
         $username = filter_var($_POST['login']);
         $pass = filter_var($_POST['password']);
+        $nom = filter_var($_POST['nom']);
+        $prenom = filter_var($_POST['prenom']);
+        $tel = filter_var($_POST['telephone']);
+        $email = filter_var($_POST['email']);
+
         $bdd = ConnectionFactory::makeConnection();
         $c1 = $bdd->prepare("Select passwd, token from user where login=:login");
         $c1->bindParam(":login", $username);
@@ -24,7 +29,12 @@ class Auth
             $token = $d['token'];
         }
         if (password_verify($pass, $mdpbdd)) {
-            $_SESSION['user'] = serialize(new User($username, $mdpbdd, $token));
+            if($nom == null){
+                echo "ui";
+            }else{
+                echo "nn";
+            }
+            $_SESSION['user'] = serialize(new User($nom,$prenom,$tel,$username,$email, $mdpbdd, $token));
         } else {
             $_SESSION['user'] = null;
         }
@@ -43,13 +53,31 @@ class Auth
         if ($token==""){
             $token = $_SESSION['token'];
         }
-        $c2 = $bdd->prepare("insert into user values(:login,:pass,:email,null,null,null,:token)");
+        if($_SESSION['telephone'] != null){
+            $tel = $_SESSION['telephone'];
+        }else{
+            $tel=null;
+        }
+        if($_SESSION['nom'] != null){
+            $nom = $_SESSION['nom'];
+        }else{
+            $nom = null;
+        }
+        if($_SESSION['prenom'] != null){
+            $prenom = $_SESSION['prenom'];
+        }else{
+            $prenom = null;
+        }
+        $c2 = $bdd->prepare("insert into user values(:login,:pass,:email,:nom,:prenom,:tel,:token)");
         $c2->bindParam(":login", $login,);
         $pass = password_hash($pass, PASSWORD_DEFAULT, ['cost' => 12]);
         $c2->bindParam(":pass", $pass);
         $c2->bindParam(":email",$email);
+        $c2->bindParam(":nom",$nom);
+        $c2->bindParam(":prenom",$prenom);
+        $c2->bindParam(":tel",$tel);
+
         $c2->bindParam(":token", $token);
-        echo$email;
         $c2->execute();
 
         $_POST['login'] = $login;
