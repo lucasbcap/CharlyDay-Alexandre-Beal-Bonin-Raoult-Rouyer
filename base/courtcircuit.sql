@@ -49,7 +49,8 @@ CREATE TABLE `user` (
     `nomUser` varchar(20) DEFAULT NULL,
   `prenomUser` varchar(20) DEFAULT NULL,
   `tel` varchar(20) DEFAULT NULL,
-  `token` varchar(50) NOT NULL
+  `token` varchar(50) NOT NULL,
+  privilege int(2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `panier`;
