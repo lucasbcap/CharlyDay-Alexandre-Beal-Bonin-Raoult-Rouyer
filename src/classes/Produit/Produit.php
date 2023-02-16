@@ -1,6 +1,6 @@
 <?php
 
-namespace customBox\classes\Produit;
+namespace customBox\Produit;
 class Produit {
 
     protected int $id;
