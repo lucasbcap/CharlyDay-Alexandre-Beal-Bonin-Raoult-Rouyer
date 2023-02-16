@@ -4,14 +4,14 @@
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-
+DROP TABLE IF EXISTS `categorie`;
 CREATE TABLE categorie (
   id int(11) NOT NULL,
   nom text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
+DROP TABLE IF EXISTS `produit`;
 CREATE TABLE produit (
   id int(11) NOT NULL,
   categorie int(11) NOT NULL,
@@ -26,6 +26,7 @@ CREATE TABLE produit (
   longitude float(8,6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `commentaire`;
 CREATE TABLE commentaire (
   `comm` varchar(1000) DEFAULT NULL,
   `note` int(11) NOT NULL,
@@ -33,11 +34,13 @@ CREATE TABLE commentaire (
   `idProduit` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `favori`;
 CREATE TABLE `favori` (
   `email` varchar(256) NOT NULL,
   `idProduit` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
     `login` varchar(20) NOT NULL,
   `passwd` varchar(256) NOT NULL,
@@ -48,6 +51,7 @@ CREATE TABLE `user` (
   `token` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `panier`;
 CREATE TABLE `panier` (
   `email` varchar(256) NOT NULL,
   `idProduit` int(11) NOT NULL
