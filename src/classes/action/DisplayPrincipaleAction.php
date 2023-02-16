@@ -17,20 +17,21 @@ class DisplayPrincipaleAction extends Action
         $user = unserialize($_SESSION['user']);
         if ($this->http_method == "GET") {
             $array = $user->getSQL("favori");                   // on recupere tout les id des serie dans favori
-            if ($array!=null) {
+            if ($array != null) {
                 $res .= "<div class='listeGeneral'>";
                 foreach ($array as $d) {
                     $produitcourant = new CatalogueRender($d);
                     $res .= $produitcourant->render(1);          // on affiche pour chaque leur titre et leur image
                 }
                 $res .= "</div>";
-            }else{
+            } else {
                 $res .= "Aucun produit en favori";
             }
 
-        $res="test";
+
+
+        }
         return $res;
-
     }
-
 }
+

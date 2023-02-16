@@ -168,7 +168,7 @@ class Dispatcher
             $rese = "<!DOCTYPE html>                     
                     <html lang='fr'>    
                     <head>
-                        <title>NetVOD</title>
+                        <title>Court Circuit</title>
                         <meta charset='UTF-8' />
                         <link rel='stylesheet' href='css/style.css'>
                         <link rel='icon' type='image/png' sizes='16x16' href=''>
@@ -179,7 +179,7 @@ class Dispatcher
                         <li><a href='?action=' id='navbar'>Accueil</a></li> 
                         <li><a href='?action=display-catalogue&page=1' id='navbar'>Afficher Catalogue</a></li>             
                         <li><a href='?action=profil' id='navbar'>Profil </a></li>                                   
-                        <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>
+                        
                         <li><a href='?action=panier' id='navbar'>Panier</a></li>                            
                         ";
             $bd = ConnectionFactory::makeConnection();
@@ -196,9 +196,10 @@ class Dispatcher
             $requete->execute();
             $data = $requete->fetch();
             if ($data['privilege'] == 1){
-                $rese.="<li><a href='?action=allUser' id='navbar'>liste des membres</a></li>";
+                $rese.="<li><a href='?action=allUser' id='navbar'>Liste des membres</a></li>";
             }
             $rese .= "$search      
+                        <li><a href='?action=deconnexion' id='navbar'>Déconnexion</a></li>
                     </ul>
                     </header>
                         <body>

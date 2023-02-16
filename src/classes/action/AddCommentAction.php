@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 namespace custumbox\action;
-use netvod\db\ConnectionFactory;
-use netvod\user\user;
 use \PDO;
 //Action qui permet d'ajouter un commentaire
 class AddCommentAction extends Action
