@@ -1,7 +1,8 @@
 <?php
 
-namespace custumbox\dispatcher;
 
+namespace custumbox\dispatcher;
+use custumbox\action\AddUserAction;
 class Dispatcher
 {
     protected ?string $action = null;
@@ -26,8 +27,8 @@ class Dispatcher
        // } else {
             switch ($act) {
                 case 'add-user':                // inscription
-                //    $act = new AddUserAction();
-                //    $html = $act->execute();
+                    $act = new AddUserAction();
+                   $html = $act->execute();
                     break;
                 case 'sign-in':                 //connexion
                   //  $act = new SigninAction();
