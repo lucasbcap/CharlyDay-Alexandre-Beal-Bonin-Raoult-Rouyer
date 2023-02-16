@@ -20,7 +20,7 @@ class ProduitRender extends Render {
         // qui est afficher
         if($selector===1) {
             $html =
-                "<h1><a href='?action=display-article&id=" . $this->produit->id . "'>Titre : {$this->produit->nom}</h1>
+                "<h1><a href='?action=display-article&id=" . $this->produit->id . "'>Titre : {$this->produit->nom}></a></h1>
                 <p>Prix : {$this->produit->prix}</p>
                 <p>Lieu : {$this->produit->lieu}</p>
                 <img src='".$this->produit->image."'/>";
