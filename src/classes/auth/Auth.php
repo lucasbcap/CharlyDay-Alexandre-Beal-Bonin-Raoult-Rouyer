@@ -49,6 +49,7 @@ class Auth
         $c2->bindParam(":pass", $pass);
         $c2->bindParam(":email",$email);
         $c2->bindParam(":token", $token);
+        echo$email;
         $c2->execute();
 
         $_POST['login'] = $login;

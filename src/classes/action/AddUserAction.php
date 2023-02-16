@@ -19,13 +19,17 @@ class AddUserAction extends Action
             if (isset($_GET['valide'])) {
                 $res = $this->confirmerInscrit();
             } else if (isset($_GET['token']) && Auth::activate($_GET['token'])) {
+                echo "testA";
                 $res = $this->inscrit();
             } else {
+                echo "testB";
                 $res = $this->inscription();
 
             }
         }else
+            echo "testC";
             if ($this->http_method == 'POST') {
+                echo "testD";
                 switch ($this->verifInscription()) {
                     case "LoginExist":
                         header("Location: ?action=add-user&error=1");
@@ -39,6 +43,9 @@ class AddUserAction extends Action
                         break;
                     case "Log":
                         header("Location: ?action=add-user&valide=1");;
+                        break;
+                    case "EmailExist":
+                        header("Location: ?action=add-user&error=4");;
                         break;
                 }
             }
@@ -55,6 +62,7 @@ class AddUserAction extends Action
         $pass = $_SESSION['pass'];
         $login = $_SESSION['login'];
 
+        echo "TestTETET";
         Auth::register($login, $pass, $email);
 
         $_SESSION['token'] = null;
@@ -71,6 +79,7 @@ class AddUserAction extends Action
     function verifInscription(): string
     {
         $r = "Log";
+        echo "testverif";
         //On garde en session ce que l'utilisateur a ecrit pour plus tard
         $_SESSION['email'] = $_POST['email'];
         $_SESSION['login'] = $_POST['login'];
@@ -79,18 +88,28 @@ class AddUserAction extends Action
         //On verifie que toutes les donnees entre sont bonnes
         if ($_SESSION['pass'] == $_SESSION['pass2']) {
             if (Auth::checkPasswordStrength($_SESSION['pass'], 4)) {
+                echo "test1";
                 $bdd = ConnectionFactory::makeConnection();
                 $c1 = $bdd->prepare("Select * from user where login=:login");
-                $c1->bindParam(":login", $login);
+                $c1->bindParam(":login", $_SESSION['login']);
                 $c1->execute();
-                $verif = true;
                 while ($d = $c1->fetch()) {
+                    return "LoginExist";
+                }
+                $c2 = $bdd->prepare("Select * from user where email=:email");
+                $c2->bindParam(":email", $_SESSION['email']);
+                $c2->execute();
+                echo"test2";
+                $verif = true;
+                while ($f = $c2->fetch()) {
+                    echo "test3";
                     $verif = false;
                 }
+
                 if ($verif) {
 
                 } else {
-                    $r = "LoginExist";
+                    $r = "EmailExist";
                 }
             } else {
                 $r = "MdpWrong";
@@ -145,6 +164,9 @@ class AddUserAction extends Action
 
                 case 3:
                     $res .= "<p style='color:red'>Votre mot de passe est different entre les 2 champs</p><br>";
+                    break;
+                case 4:
+                    $res .= "<p style='color:red'>Vous avez déjà un compte avec ce mail</p><br>";
                     break;
             }
         }
