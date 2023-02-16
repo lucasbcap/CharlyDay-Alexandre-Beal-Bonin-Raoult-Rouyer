@@ -1,5 +1,5 @@
 <?php
-namespace custumBox\render;
+namespace custumbox\Render;
 abstract class Render
 {
 

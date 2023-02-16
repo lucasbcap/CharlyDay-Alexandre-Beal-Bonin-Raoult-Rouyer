@@ -58,7 +58,7 @@ class Produit {
         $req1->execute();
         $d = $req1->fetch();
         //on enregistre les données de la base de données dans la serie
-        return new Produit($d['id'],$d['nom'], $d['prix'], $d['poids'], $d['description'], $d['detail'],$d['lieu'], $d['distance'], "img/".$d['id'].".jpg", $d['latitude'], $d['longitude'], 0, $d['categorie']);
+        return new Produit($d['id'],$d['nomProd'], $d['prix'], $d['poids'], $d['description'], $d['detail'],$d['lieu'], $d['distance'], "img/".$d['id'].".jpg", $d['latitude'], $d['longitude'], 0, $d['categorie']);
     }
 
 }

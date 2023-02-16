@@ -4,9 +4,8 @@ namespace custumbox\user;
 
 use custumbox\Catalogue\Produit;
 use custumbox\db\ConnectionFactory as ConnectionFactory;
-use iutnc\netvod\video\Serie;
 
-use custumbox\Catégorie\Categorie;
+use custumbox\Catalogue\Categorie;
 
 /**
  * Classe User
@@ -55,8 +54,8 @@ class User
     function getSQL(string $table): ?array
     {
         $bdd = ConnectionFactory::makeConnection();
-        $c1 = $bdd->prepare("select idProduit from $table where email = :email");
-        $c1->bindParam(":email", $this->email);
+        $c1 = $bdd->prepare("select idProduit from $table where login = :login");
+        $c1->bindParam(":login", $this->login);
         $c1->execute();
         $array = null;
         while ($d = $c1->fetch()) {
@@ -90,7 +89,7 @@ class User
      * @param int $idEpisode Numero de l'episode si la table selectionne est 'encours'
      * @return void
      */
-    function addSQL(int $id, string $table, int $idEpisode = 0): void
+    function addSQL(int $id, string $table): void
     {
         $bdd = ConnectionFactory::makeConnection();
 
@@ -139,5 +138,14 @@ class User
         }else {
             throw new \Exception("$at: invalid property");
         }
+    }
+
+    public function addPanier(int $idProduite, int $qte){
+        $db = ConnectionFactory::makeConnection();
+        $query = $db->prepare("INSERT INTO favorite VALUES(?, ?, ?)");
+        $query->bindParam(1, $this->login);
+        $query->bindParam(2, $idProduite);
+        $query->bindParam(3, $qte);
+        return $query->execute();
     }
 }
