@@ -2,6 +2,7 @@
 
 namespace custumbox\action;
 use custumbox\action\Action;
+use custumbox\render\CatalogueRender;
 
 class DisplayPrincipaleAction extends Action
 {
@@ -12,9 +13,8 @@ class DisplayPrincipaleAction extends Action
 
     public function execute(): string
     {
-        $res = "CECI EST LA PAGE DE BASE";
-        
 
+        $res="test";
         return $res;
 
     }
